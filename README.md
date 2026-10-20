@@ -25,19 +25,6 @@ This repository holds my work for three Microelectronics assignments at Bharati 
 - [Licence and attribution](#licence-and-attribution)
 - [References](#references)
 
-## Deliverables
-
-Each written document exists in two forms: the college-template DOCX that I submit, and an equivalent LaTeX source with a compiled PDF.
-
-| Document | DOCX | LaTeX source | PDF |
-|---|---|---|---|
-| ECC-305 PBL Component I review (college template, 13 review points) | `PBL_Review.docx` | `latex/PBL_Review.tex` | `latex/PBL_Review.pdf` |
-| ECC-353 CBS experiment report (college template, real ngspice results) | `CBS_Experiment.docx` | `latex/CBS_Experiment.tex` | `latex/CBS_Experiment.pdf` |
-| SN74AUP1G04 case study (datasheet Rev. K) with audience Q&A | `Case_Study.docx` | `latex/Case_Study.tex` | `latex/Case_Study.pdf` |
-| 6-slide, 5-minute talk on the case study, with speaker notes and timings | `Case_Study_Presentation.pptx` | n/a | n/a |
-
-Personal fields (name, roll number, batch, group, dates, signatures, marks) are deliberately blank in every committed file. In the LaTeX versions I fill them in once, in `latex/student_info.tex`.
-
 ## Repository layout
 
 ```text
