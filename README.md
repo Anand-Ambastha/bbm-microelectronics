@@ -217,5 +217,3 @@ Please read these before relying on any number in this repository.
 4. H. J. M. Veendrick, "Short-circuit dissipation of static CMOS circuitry and its impact on the design of buffer circuits," *IEEE J. Solid-State Circuits*, vol. SC-19, no. 4, pp. 468-473, 1984 (cited in [1]; not independently consulted).
 5. N. H. E. Weste and D. M. Harris, *Principles of CMOS VLSI Design: A Circuits and Systems Perspective*, 4th ed., Addison-Wesley, 2011 (cited in [1]; not independently consulted).
 6. ngspice, open-source circuit simulator, version 42. <https://ngspice.sourceforge.io/>
-#   b c c - m i c r o e l e c t r o n i c s  
- 
