@@ -23,3 +23,5 @@ latex/*.lot
 
 *.docx
 *.pptx
+
+docs_src/
