@@ -137,39 +137,6 @@ python3 make_schematics.py && python3 make_plots.py
 
 `optimize.py` uses a fixed seed, but results can differ slightly across SciPy and ngspice versions.
 
-### 2. DOCX and PPTX documents
-
-```bash
-cd docs_src
-python3 build_pbl.py && python3 build_cbs.py && python3 build_case.py && python3 build_pptx.py
-```
-
-The scripts read `results/*.json` and `figures/`, so every number in the reports comes straight from the simulation output.
-
-### 3. LaTeX documents
-
-Requirements: a TeX Live installation (tested with TeX Live 2023 and pdfLaTeX) and `latexmk`. Besides the base distribution, the documents use `siunitx` (v3 or later), `booktabs`, `tabularx`, `multirow`, `enumitem`, `caption`, `titlesec`, `fancyhdr`, `microtype`, `float`, `placeins`, `hyperref`, and the standard PSNFSS fonts (`mathptmx`, `helvet`, `pifont`). On Debian or Ubuntu, `sudo apt-get install texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended texlive-science latexmk` covers all of them.
-
-```bash
-cd latex
-make                  # builds PBL_Review.pdf, CBS_Experiment.pdf and Case_Study.pdf
-# or one at a time:
-latexmk -pdf PBL_Review.tex
-make clean            # remove build files, keep the PDFs
-```
-
-The `.tex` files load figures from `../figures/`, so build from inside `latex/`. To print my details on the title blocks, edit `latex/student_info.tex`:
-
-```latex
-\newcommand{\StudentName}{Your Name}
-\newcommand{\RollNo}{00000000000}
-\newcommand{\Batch}{ECE-X}
-\newcommand{\GroupNo}{1}
-\newcommand{\SubmissionDate}{DD/MM/YYYY}
-```
-
-Leaving a field empty prints a blank line instead.
-
 ## Assumptions and known limitations
 
 Please read these before relying on any number in this repository.
@@ -180,7 +147,6 @@ Please read these before relying on any number in this repository.
 4. **Meaning of PDP.** I define PDP as P<sub>avg</sub> x T<sub>p</sub> at 50 MHz, as the assignment asks. Because P<sub>avg</sub> scales with frequency, the frequency-independent charge or energy per cycle is the cleaner metric. Area is only a sum-of-W x L gate-area proxy; I did no layout.
 5. **Small optimiser.** My optimiser is far smaller than the paper's 100-node SADE run, so my sizings are not guaranteed global optima. I optimised only at 0.5 and 1.0 ns, and did not re-test the short-delay region (0.35 ns and below) where the paper finds no advantage.
 6. **No clean mechanism test.** The crowbar-charge estimate is small and the delay-element-removal ablation changes the delay by about 4x, so my data cannot isolate how much of the saving comes from eliminated short-circuit current and how much from smaller devices.
-7. **Placeholders.** Name, roll number, batch, dates, signatures and marks are untouched placeholders in the committed files.
 8. **Case-study data.** Values were checked against TI datasheet SCES571K (Rev. K, June 2014), retrieved on 20 Oct 2026. Two points are worth re-checking against the PDF: (a) the I<sub>CC</sub>, delta I<sub>CC</sub>, I<sub>off</sub> and I<sub>I</sub> rows showed only two numbers in text extraction, which I read as (25 &deg;C max, -40 to 85 &deg;C max); (b) TI's product-page parametric table shows a maximum supply current of 10 uA, which disagrees with the datasheet's 0.9 uA. I used the datasheet value and noted the discrepancy in the report. Statements about similar devices (SN74LVC1G04, SN74UVP1G04) come from TI's product page and are not independently verified.
 9. **Third-party figures.** Paper Figs. 1, 8 (PtNf) and 9 appear in the PBL review as cropped images under the paper's CC BY licence, with attribution. All other diagrams are redrawn by me.
 
