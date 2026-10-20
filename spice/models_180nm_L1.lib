@@ -1,0 +1,10 @@
+* models_180nm_L1.lib  -- SUBSTITUTE model, NOT the TSMC 0.18um HSPICE model used by the paper
+* (that model is proprietary and was not available).
+* Level-1 (Shichman-Hodges) parameters are the ones printed in the caption of Fig. 4 of
+* Puhan et al., Sci. World J. 2014:349131  (VTN=0.5V, VTP=-0.5V, KPN=350uA/V^2, KPP=90uA/V^2,
+* Cox=8.6 fF/um^2 -> tox = eps_ox/Cox = 3.45e-11/8.6e-3 = 4.0 nm).
+* ASSUMED by me (not given in the paper): LAMBDA, GAMMA, PHI, overlap caps, junction caps.
+.model nmos nmos level=1 vto=0.5 kp=350u gamma=0.4 phi=0.8 lambda=0.08
++ tox=4e-9 cgso=3e-10 cgdo=3e-10 cj=1e-3 mj=0.5 cjsw=2.5e-10 mjsw=0.33 pb=0.9 js=1e-9
+.model pmos pmos level=1 vto=-0.5 kp=90u gamma=0.4 phi=0.8 lambda=0.08
++ tox=4e-9 cgso=3e-10 cgdo=3e-10 cj=1e-3 mj=0.5 cjsw=2.5e-10 mjsw=0.33 pb=0.9 js=1e-9

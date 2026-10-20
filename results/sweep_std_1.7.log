@@ -1,0 +1,48 @@
+
+Note: No compatibility mode selected!
+
+
+Circuit: * conventional_inverter.sp
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+
+Initial Transient Solution
+--------------------------
+
+Node                                   Voltage
+----                                   -------
+s1                                         1.8
+s2                                         1.8
+s3                                         1.8
+s4                                         1.8
+g1                                           0
+g2                                           0
+g3                                           0
+g4                                           0
+in                                           0
+n1                                         1.8
+n2                                 2.69011e-08
+n3                                         1.8
+out                                3.23676e-09
+vin#branch                                   0
+vg4#branch                             1.8e-12
+vg3#branch                                   0
+vg2#branch                             1.8e-12
+vg1#branch                                   0
+vdd4#branch                           -1.8e-12
+vdd3#branch                           -1.8e-12
+vdd2#branch                           -1.8e-12
+vdd1#branch                           -1.8e-12
+
+
+No. of Data Rows : 50774
+tplh                =  7.895457e-10 targ=  4.181455e-08 trig=  4.102500e-08
+tphl                =  7.232701e-10 targ=  5.179827e-08 trig=  5.107500e-08
+qtot                =  2.88949e-13 from=  2.10000e-08 to=  1.01000e-07
+q_st3               =  6.28638e-14 from=  2.10000e-08 to=  1.01000e-07
+vout_max            =  1.819850e+00 at=  9.170780e-08
+vout_min            =  -9.401623e-03 at=  4.173060e-08
+ipk3                =  4.223579e-05 at=  5.176036e-08
+Note: Simulation executed from .control section 

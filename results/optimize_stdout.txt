@@ -1,0 +1,2 @@
+0.5 conventional {'params': {'lp1': 779, 'ln1': 1113, 'wp2': 249, 'lp2': 632, 'wn2': 371, 'ln2': 1257}, 'obj': np.float64(44.054), 'nfev': 960}
+0.5 bbm {'params': {'lp1': 913, 'wn1': 239, 'ln1': 196, 'wpt': 260, 'lpt': 189, 'lnf': 283, 'lp2': 197, 'ln2': 593}, 'obj': np.float64(38.27466666666666), 'nfev': 960}

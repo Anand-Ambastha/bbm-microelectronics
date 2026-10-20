@@ -1,0 +1,180 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{common}
+\setrunninghead{ECC-305 Microelectronics -- Case Study: SN74AUP1G04}
+\hypersetup{pdftitle={Case Study: Texas Instruments SN74AUP1G04, Low-Power Single Inverter Gate},pdfauthor={}}
+\newcommand{\DS}{\textbf{[DS]}}
+\newcommand{\Expl}{\textbf{[Expl]}}
+\newcommand{\qa}[2]{\par\smallskip\textbf{Q:} #1\par\textbf{A:} #2\par}
+\titleformat{\section}{\normalfont\Large\bfseries}{\thesection.}{0.6em}{}
+\titlespacing*{\section}{0pt}{14pt}{4pt}
+
+\begin{document}
+
+\begin{center}
+  {\LARGE\bfseries Case Study: Texas Instruments SN74AUP1G04,\\Low-Power Single Inverter Gate}\\[8pt]
+  {\itshape ECC-305 Microelectronics, Theory Case Study: commercially available IC / VLSI system (10 marks)}\\[6pt]
+  {\itshape Student name / roll no.\ / batch / date:}
+  \fillfield{\StudentName}{3cm}\ /\ \fillfield{\RollNo}{2cm}\ /\ \fillfield{\Batch}{2cm}\ /\ \fillfield{\SubmissionDate}{2cm}
+\end{center}
+
+\textbf{Convention used in this report.} \DS{} marks a value or statement taken from the manufacturer's datasheet (SN74AUP1G04, document SCES571K, June 2004, revised June 2014, ``Rev.~K'', retrieved from \href{https://www.ti.com/lit/gpn/SN74AUP1G04}{ti.com} on 20~Oct~2026; TI's product page lists Rev.~K as the current datasheet and the device status as ACTIVE). \Expl{} marks my own explanation or calculation, not a manufacturer specification.
+
+% ------------------------------------------------------------------
+\section{Device function and internal logic}
+\DS{} The SN74AUP1G04 is a single inverter gate performing the Boolean function $Y=\overline{A}$ (function table: $A=\mathrm{H}\Rightarrow Y=\mathrm{L}$; $A=\mathrm{L}\Rightarrow Y=\mathrm{H}$). It belongs to TI's AUP (``Advanced Ultra-low-Power'') family; per the datasheet the family has quiescent power consumption below \SI{1}{\micro\ampere}, and the device is offered in several packages from SOT-23 (DBV, \SI{2.90}{\milli\meter}$\times$\SI{1.60}{\milli\meter} nominal) down to the \SI{0.64}{\milli\meter\squared} X2SON (DPW, \SI{0.8}{\milli\meter}$\times$\SI{0.8}{\milli\meter}) with \SI{0.5}{\milli\meter} pitch. Pin functions (DBV/DCK/DRL): 1~N.C., 2~A (input), 3~GND, 4~Y (output), 5~\Vcc.
+
+\DS{} Features that influence the internal design: balanced outputs; input hysteresis ($V_{hys}=\SI{250}{\milli\volt}$ typ.\ at \SI{3.3}{\volt}, listed under Features) that tolerates slow input transitions; over-voltage-tolerant \SI{3.6}{\volt} inputs/outputs; \Ioff{} circuitry for partial power-down and live insertion; and reduced drive strength that, in the datasheet's words, produces slower edges and prevents overshoot and undershoot.
+
+\Expl{} The datasheet gives only a functional block diagram (an inverter symbol); the internal transistor netlist is not published. At the logic level the function is that of a static CMOS inverter: a PMOS pull-up and an NMOS pull-down driven by the same input (Fig.~\ref{fig:inv}). The real device also contains input hysteresis, \Ioff{}/back-drive protection and (probably) buffer stages, so the generic circuit is illustrative only. This is the same structure that the BBM paper (Case Study~2, ECC-353) modifies to remove short-circuit current.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.32\textwidth]{fig_cmos_inverter_generic.png}
+  \caption{Generic static CMOS inverter (illustrative only; not TI's published internal netlist).}
+  \label{fig:inv}
+\end{figure}
+
+% ------------------------------------------------------------------
+\section{Supply-voltage range}
+\begin{table}[H]
+  \centering\small
+  \begin{tabularx}{\textwidth}{@{}p{3.4cm} X X@{}}
+    \toprule
+    Parameter \DS{} & Value & Conditions / note\\
+    \midrule
+    Recommended \Vcc & \SIrange{0.8}{3.6}{\volt} & Recommended operating conditions (optimised for \SI{3.3}{\volt} per Features)\\
+    Absolute maximum \Vcc & \SIrange{-0.5}{4.6}{\volt} & Stress rating only\\
+    Input voltage $V_I$ & \SIrange{0}{3.6}{\volt} & Inputs \SI{3.6}{\volt} tolerant at any valid \Vcc; abs.\ max.\ \SIrange{-0.5}{4.6}{\volt}\\
+    $V_{IH}$ (min) & $0.65\times\Vcc$ (\SIrange{1.1}{1.95}{\volt}); \SI{1.6}{\volt} (\SIrange{2.3}{2.7}{\volt}); \SI{2}{\volt} (\SIrange{3}{3.6}{\volt}) & High-level input voltage\\
+    $V_{IL}$ (max) & $0.35\times\Vcc$ (\SIrange{1.1}{1.95}{\volt}); \SI{0.7}{\volt} (\SIrange{2.3}{2.7}{\volt}); \SI{0.9}{\volt} (\SIrange{3}{3.6}{\volt}) & Low-level input voltage\\
+    Output drive $I_{OH}$ / $I_{OL}$ (max) & $\pm\SI{20}{\micro\ampere}$ (\SI{0.8}{\volt}); $\pm\SI{1.1}{\milli\ampere}$ (\SI{1.1}{\volt}); $\pm\SI{1.7}{\milli\ampere}$ (\SI{1.4}{\volt}); $\pm\SI{1.9}{\milli\ampere}$ (\SI{1.65}{\volt}); $\pm\SI{3.1}{\milli\ampere}$ (\SI{2.3}{\volt}); $\pm\SI{4}{\milli\ampere}$ (\SI{3}{\volt}) & Recommended operating conditions\\
+    Input transition rate $\Delta t/\Delta v$ & \SI{200}{\nano\second\per\volt} max & $\Vcc=\SIrange{0.8}{3.6}{\volt}$\\
+    Operating temperature & \SIrange{-40}{85}{\celsius} & Free-air\\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+% ------------------------------------------------------------------
+\section{Power-related specifications}
+\begin{table}[H]
+  \centering\small
+  \begin{tabularx}{\textwidth}{@{}p{3.3cm} X X@{}}
+    \toprule
+    Parameter \DS{} & Value & Test conditions\\
+    \midrule
+    Static supply current \Icc & \SI{0.5}{\micro\ampere} max.\ at \SI{25}{\celsius}; \SI{0.9}{\micro\ampere} max.\ over \SIrange{-40}{85}{\celsius} (the \SI{0.9}{\micro\ampere} figure is also quoted in Features) & $V_I=$ GND or \Vcc, $I_O=0$, $\Vcc=\SIrange{0.8}{3.6}{\volt}$\\
+    $\Delta\Icc$ (one input held below rail) & \SI{40}{\micro\ampere} (\SI{25}{\celsius}) / \SI{50}{\micro\ampere} (\SIrange{-40}{85}{\celsius}) max. & $V_I=\Vcc-\SI{0.6}{\volt}$, $I_O=0$, $\Vcc=\SI{3.3}{\volt}$\\
+    \Ioff{} (partial power-down) & \SI{0.2}{\micro\ampere} (\SI{25}{\celsius}) / \SI{0.6}{\micro\ampere} (\SIrange{-40}{85}{\celsius}) max. & $\Vcc=\SI{0}{\volt}$, $V_I$ or $V_O=\SIrange{0}{3.6}{\volt}$\\
+    Input leakage $I_I$ & \SI{0.1}{\micro\ampere} (\SI{25}{\celsius}) / \SI{0.5}{\micro\ampere} (\SIrange{-40}{85}{\celsius}) max. & $V_I=$ GND to \SI{3.6}{\volt}, $\Vcc=\SIrange{0}{3.6}{\volt}$\\
+    Power dissipation capacitance \Cpd & \SI{3.9}{\pico\farad} typ.\ ($\Vcc=\SIrange{0.8}{2.5}{\volt}$); \SI{4.1}{\pico\farad} typ.\ ($\Vcc=\SI{3.3}{\volt}\pm\SI{0.3}{\volt}$) & $f=\SI{10}{\mega\hertz}$, $T_A=\SI{25}{\celsius}$\\
+    Input capacitance $C_i$ / output $C_o$ & \SI{1.5}{\pico\farad} typ.\ / \SI{2.5}{\pico\farad} typ. & $V_I=\Vcc$ or GND; $C_o$ at $\Vcc=\SI{3.6}{\volt}$\\
+    Output levels & $V_{OH}\ge\Vcc-\SI{0.1}{\volt}$ and $V_{OL}\le\SI{0.1}{\volt}$ at $|I_O|=\SI{20}{\micro\ampere}$ (\SIrange{0.8}{3.6}{\volt}); e.g.\ $V_{OH}\ge\SI{1.32}{\volt}$ (\SI{25}{\celsius}) at \SI{1.65}{\volt}, $I_{OH}=\SI{-1.9}{\milli\ampere}$ & See datasheet Section~7.5\\
+    Thermal resistance $R_{\theta JA}$ & \SI{298.6}{\celsius\per\watt} (DBV) \ldots\ \SI{554.9}{\celsius\per\watt} (DRY) & Thermal information table\\
+    ESD & HBM \SI{2000}{\volt}, CDM \SI{1000}{\volt} & Handling ratings; latch-up $>\SI{100}{\milli\ampere}$ per JESD~78 Class~II\\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\emph{Note on column assignment: the \Icc, $\Delta\Icc$, \Ioff{} and $I_I$ rows list only two numbers in the text extraction of the PDF; they are read here as ($T_A=\SI{25}{\celsius}$ max., \SIrange{-40}{85}{\celsius} max.), which is consistent with the Features statement ``$\Icc=\SI{0.9}{\micro\ampere}$ max.'' I recommend confirming this against the PDF table if exact column placement matters.}
+
+One discrepancy turned up while checking. TI's product-page parametric table lists a maximum supply current of \SI{10}{\micro\ampere}, while the datasheet's electrical table gives $\Icc=\SI{0.9}{\micro\ampere}$ max.\ (and $\Delta\Icc$ up to \SI{50}{\micro\ampere}). The parametric figure is probably defined under a different convention (for example, a worst case across the whole family); this report uses the datasheet value. The product page also gives the typical-delay descriptor ``$t_{pd}$ 5--10\,ns'', which is a family-level figure, not the specification at a given \Vcc{} and load.
+
+% ------------------------------------------------------------------
+\section{Propagation delay and loading conditions}
+\DS{} Test conditions: load circuit of datasheet Figure~3 with $C_L=5$, 10, 15 or \SI{30}{\pico\farad} (including probe and jig), \SI{1}{\mega\ohm} resistor to the output, measured at $V_M=\Vcc/2$; input pulses from a generator with PRR $\le\SI{10}{\mega\hertz}$, $Z_O=\SI{50}{\ohm}$, $t_r/t_f\le\SI{3}{\nano\second}$; outputs measured one at a time, $t_{PLH}$ and $t_{PHL}$ are the same as \tpd.
+
+\begin{table}[H]
+  \centering\small
+  \begin{tabular}{@{}l c c@{}}
+    \toprule
+    $t_{pd}$ A$\to$Y \DS & $T_A=\SI{25}{\celsius}$: min / typ / max (ns) & \SIrange{-40}{85}{\celsius}: min / max (ns)\\
+    \midrule
+    $C_L=\SI{5}{\pico\farad}$, $\Vcc=\SI{1.8}{\volt}\pm\SI{0.15}{\volt}$ & 2.2 / 3.4 / 5.9 & 1.4 / 7.0\\
+    $C_L=\SI{5}{\pico\farad}$, $\Vcc=\SI{3.3}{\volt}\pm\SI{0.3}{\volt}$ & 1.4 / 2.1 / 3.2 & 1.2 / 3.9\\
+    $C_L=\SI{5}{\pico\farad}$, $\Vcc=\SI{1.2}{\volt}\pm\SI{0.1}{\volt}$ & 3.3 / 5.9 / 10.8 & 2.1 / 13.5\\
+    $C_L=\SI{10}{\pico\farad}$, $\Vcc=\SI{1.8}{\volt}\pm\SI{0.15}{\volt}$ & 2.6 / 4.0 / 6.9 & 2.1 / 7.9\\
+    $C_L=\SI{15}{\pico\farad}$, $\Vcc=\SI{1.8}{\volt}\pm\SI{0.15}{\volt}$ & 3.2 / 4.6 / 7.4 & 2.6 / 8.5\\
+    $C_L=\SI{30}{\pico\farad}$, $\Vcc=\SI{1.8}{\volt}\pm\SI{0.15}{\volt}$ & 4.6 / 6.3 / 9.2 & 4.1 / 10.5\\
+    $C_L=\SI{30}{\pico\farad}$, $\Vcc=\SI{3.3}{\volt}\pm\SI{0.3}{\volt}$ & 3.2 / 4.0 / 5.4 & 2.9 / 6.2\\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Other values from the same tables: at $\Vcc=\SI{0.8}{\volt}$ the datasheet gives a single $t_{pd}$ value of \SI{15.6}{\nano\second} ($C_L=\SI{5}{\pico\farad}$), \SI{17.7}{\nano\second} (\SI{10}{\pico\farad}), \SI{19.5}{\nano\second} (\SI{15}{\pico\farad}) and \SI{25.4}{\nano\second} (\SI{30}{\pico\farad}). Features: $t_{pd}=\SI{3.9}{\nano\second}$ max.\ at \SI{3.3}{\volt} (this is the $C_L=\SI{5}{\pico\farad}$, \SIrange{-40}{85}{\celsius} maximum).
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.72\textwidth]{fig_aup_tpd.png}
+  \caption{Typical propagation delay $t_{pd}$ (A$\to$Y, $T_A=\SI{25}{\celsius}$) of the SN74AUP1G04 versus load capacitance for five supply ranges; values read from the datasheet Rev.~K tables.}
+\end{figure}
+
+\emph{Delay rises with load (about \SI{+0.5}{\nano\second} per \SI{5}{\pico\farad} near \SI{1.8}{\volt} for the first steps, then more slowly per pF) and rises steeply as \Vcc{} falls toward \SI{0.8}{\volt}, because the drive current falls roughly with $(\Vcc-V_T)^2$} \Expl.
+
+% ------------------------------------------------------------------
+\section{Worked example: dynamic versus static power}
+\Expl{} (calculation using the datasheet \Cpd, $C_L$ and \Icc). Using the standard definition $P_{dyn}=(C_{pd}+C_L)\,V_{CC}^2 f$ (a general formula, not a datasheet statement) with $\Vcc=\SI{1.8}{\volt}$, $f=\SI{10}{\mega\hertz}$, $C_{pd}=\SI{3.9}{\pico\farad}$ (datasheet) and $C_L=\SI{5}{\pico\farad}$ (the datasheet test load):
+\begin{equation*}
+  P_{dyn} = (\SI{3.9}{\pico\farad}+\SI{5}{\pico\farad})\times(\SI{1.8}{\volt})^2\times\SI{10}{\mega\hertz}
+  = 8.9\times10^{-12}\times 3.24\times 10^{7}\ \mathrm{W} \approx \SI{288}{\micro\watt}.
+\end{equation*}
+The worst-case static power from the datasheet is $\Icc(\max)\times\Vcc=\SI{0.9}{\micro\ampere}\times\SI{1.8}{\volt}\approx\SI{1.6}{\micro\watt}$, i.e.\ under \SI{1}{\percent} of the dynamic power at \SI{10}{\mega\hertz}. Dynamic power therefore dominates whenever the gate toggles; static power matters mainly for rarely toggling, battery-backed nodes. These are calculations at one chosen operating point, not specifications.
+
+% ------------------------------------------------------------------
+\section{Applications and engineering relevance}
+\DS{} Listed applications include ATCA solutions, active noise cancellation, barcode scanners, blood-pressure monitors, CPAP machines, cable solutions, embedded PCs, field transmitters, fingerprint biometrics, HVAC, NAS, server motherboards/PSU, software-defined radio, TVs, video-communications systems, wireless data-access cards/headsets/keyboards/mice and X-ray equipment.
+
+\DS{} Section~10: the AUP family is positioned for battery-powered portable products; the \SI{3.6}{\volt}-tolerant I/O allows down-translation, for example dropping \SI{3.3}{\volt} peripheral drivers to the \SIrange{0.8}{1.2}{\volt} levels of newer microcontrollers.
+
+\Expl{} Typical uses: signal inversion, glue logic, clock/enable conditioning, level-compatible interfacing, and (as a building block) simple oscillators or delay elements when combined with R and C. Relevance to ECC-305: a real-world instance of low-power CMOS design, with small \Cpd{} and \Icc, reduced drive and slow edges to cut dynamic power and ground bounce, hysteresis for slow inputs, and \Ioff{} for partial power-down. The BBM paper (PBL component) is about removing the short-circuit part of dynamic power in exactly this kind of inverter-based stage.
+
+% ------------------------------------------------------------------
+\section{Limitations and design trade-offs}
+\begin{itemize}
+  \item \textbf{Speed versus power.} $t_{pd}$ is a few ns even at \SI{3.3}{\volt} (\SI{3.2}{\nano\second} max.\ at \SI{25}{\celsius}, \SI{3.9}{\nano\second} over temperature, $C_L=\SI{5}{\pico\farad}$) and \SIrange{10}{15}{\nano\second} at \SIrange{1.2}{0.8}{\volt}; the datasheet does not quote a maximum clock frequency.
+  \item \textbf{Drive strength.} Only $\pm\SI{4}{\milli\ampere}$ at \SI{3}{\volt}, $\pm\SI{1.9}{\milli\ampere}$ at \SI{1.65}{\volt} and $\pm\SI{20}{\micro\ampere}$ at \SI{0.8}{\volt}; unsuitable for driving LEDs, long unterminated lines or heavy capacitive loads (delay rises with $C_L$).
+  \item \textbf{Input conditions.} Input rise/fall must not exceed \SI{200}{\nano\second\per\volt}; unused inputs must be tied to \Vcc{} or GND; an input held between rails (the $\Delta\Icc$ condition) can draw up to \SI{50}{\micro\ampere} at \SI{3.3}{\volt}.
+  \item \textbf{Absolute limits.} $\Vcc\le\SI{4.6}{\volt}$ (abs.\ max.), continuous output current $\pm\SI{20}{\milli\ampere}$, \Vcc/GND current $\pm\SI{50}{\milli\ampere}$; ESD ratings are modest (HBM \SI{2000}{\volt}, CDM \SI{1000}{\volt}), so ESD handling is needed.
+  \item \textbf{Thermal.} $R_{\theta JA}\approx\SIrange{300}{555}{\celsius\per\watt}$ depending on package; irrelevant at \si{\micro\watt} power but limits sustained heavy drive.
+  \item \textbf{Family trade-offs} (TI product page, Similar products; \DS/TI page). SN74LVC1G04 offers \SIrange{1.65}{5.5}{\volt} operation and much higher drive (stated average \SI{24}{\milli\ampere}) at the cost of higher power; TI also lists the newer SN74UVP1G04 (\SIrange{0.65}{3.6}{\volt}, preview) as a lower-voltage alternative.
+\end{itemize}
+
+% ------------------------------------------------------------------
+\section{Questions the audience may ask (technically accurate answers)}
+\qa{What does $Y=\overline{A}$ mean, and is the output ever undefined?}
+   {It is a logical inversion. Provided $V_I$ is within the recommended levels ($V_{IL}$ max.\ / $V_{IH}$ min.\ for the \Vcc{} used) and \Vcc{} is within \SIrange{0.8}{3.6}{\volt}, the output is a defined logic level; between $V_{IL}$ and $V_{IH}$ the output is not guaranteed, which is why slow or floating inputs must be avoided (hysteresis helps with slow edges).}
+
+\qa{Why is dynamic power much larger than static power?}
+   {Static current is only leakage ($\Icc\le\SI{0.9}{\micro\ampere}$), whereas every transition charges and discharges \Cpd{} and $C_L$: $P=(C_{pd}+C_L)V_{CC}^2f$. At \SI{10}{\mega\hertz}, \SI{1.8}{\volt} and \SI{5}{\pico\farad} this is about \SI{288}{\micro\watt} versus under \SI{2}{\micro\watt} static (calculation above).}
+
+\qa{How does the load capacitance change the delay?}
+   {Datasheet at \SI{1.8}{\volt}, \SI{25}{\celsius}, typical: \SI{3.4}{\nano\second} (\SI{5}{\pico\farad}), \SI{4.0}{\nano\second} (\SI{10}{\pico\farad}), \SI{4.6}{\nano\second} (\SI{15}{\pico\farad}), \SI{6.3}{\nano\second} (\SI{30}{\pico\farad}). The delay increases roughly linearly with $C_L$ because the weak output stage supplies limited current.}
+
+\qa{Why does the speed drop at low \Vcc?}
+   {Drive current falls strongly as \Vcc{} approaches $V_T$; typical $t_{pd}$ rises from \SI{2.1}{\nano\second} at \SI{3.3}{\volt} to \SI{5.9}{\nano\second} at \SI{1.2}{\volt} ($C_L=\SI{5}{\pico\farad}$), and a single \SI{15.6}{\nano\second} value is quoted at \SI{0.8}{\volt}.}
+
+\qa{What is \Ioff{} for?}
+   {With $\Vcc=\SI{0}{\volt}$ the \Ioff{} circuitry disables the outputs and limits leakage to $\le\SI{0.6}{\micro\ampere}$ ($V_I$ or $V_O$ up to \SI{3.6}{\volt}), preventing back-drive current, which allows live insertion and partial power-down.}
+
+\qa{What is the purpose of input hysteresis?}
+   {The datasheet states $V_{hys}=\SI{250}{\milli\volt}$ typ.\ at \SI{3.3}{\volt}; it gives better noise immunity and allows slow input transitions without output chatter. It does not remove the \SI{200}{\nano\second\per\volt} limit.}
+
+\qa{Can a \SI{3.3}{\volt} signal drive this gate when $\Vcc=\SI{1.2}{\volt}$?}
+   {Yes: inputs and outputs are specified \SI{3.6}{\volt} tolerant, so the gate can down-translate \SI{3.3}{\volt} signals to its \Vcc{} level (datasheet applications section). Output levels are then limited to \Vcc.}
+
+\qa{How is this related to break-before-make?}
+   {Any static CMOS inverter has a brief moment of PMOS and NMOS both conducting (short-circuit current). AUP devices reduce it through slower, controlled edges and low drive; the BBM technique in the research paper removes it structurally with time-skewed gate signals but costs extra transistors and wiring. TI does not state that the AUP1G04 uses BBM.}
+
+\qa{Why choose this gate instead of SN74LVC1G04?}
+   {For battery-powered products where power and tiny packages matter and loads are small; LVC offers higher drive and \SI{5.5}{\volt} operation but consumes more power.}
+
+\qa{Which numbers should I quote if asked for ``the'' propagation delay?}
+   {Always give \Vcc, $C_L$, temperature and whether it is min/typ/max: for example, \SI{3.4}{\nano\second} typ.\ at \SI{1.8}{\volt}, \SI{5}{\pico\farad}, \SI{25}{\celsius}; \SI{3.9}{\nano\second} max.\ at \SI{3.3}{\volt} over temperature.}
+
+% ------------------------------------------------------------------
+\begin{thebibliography}{9}
+  \bibitem{ds} Texas Instruments, ``SN74AUP1G04 Low-Power Single Inverter Gate,'' datasheet SCES571K, June 2004, revised June 2014 (Rev.~K), \url{https://www.ti.com/lit/gpn/SN74AUP1G04} (retrieved 20~Oct~2026; package addendum dated Oct~2025).
+  \bibitem{page} Texas Instruments, SN74AUP1G04 product page, \url{https://www.ti.com/product/SN74AUP1G04} (status ACTIVE; parametric data; similar products; retrieved 20~Oct~2026).
+  \bibitem{puhan} J.~Puhan, D.~Rai\v{c}, T.~Tuma, and \'A.~B\H{u}rmen, ``Break-before-Make CMOS Inverter for Power-Efficient Delay Implementation,'' \emph{The Scientific World Journal}, vol.~2014, Art.~349131, doi:\href{https://doi.org/10.1155/2014/349131}{10.1155/2014/349131}.
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+
+# ngspice
+*.raw
+
+# macOS
+.DS_Store
+
+# LaTeX build artefacts (the compiled PDFs in latex/ are kept)
+latex/*.aux
+latex/*.log
+latex/*.out
+latex/*.fls
+latex/*.fdb_latexmk
+latex/*.synctex.gz
+latex/*.toc
+latex/*.bbl
+latex/*.blg
+latex/*.lof
+latex/*.lot
+
+*.docx
+*.pptx

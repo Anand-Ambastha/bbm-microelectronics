@@ -1,0 +1,55 @@
+
+Note: No compatibility mode selected!
+
+
+Circuit: * bbm_inverter.sp
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+
+Initial Transient Solution
+--------------------------
+
+Node                                   Voltage
+----                                   -------
+s1                                         1.8
+s2                                         1.8
+s3                                         1.8
+s4                                         1.8
+g1                                           0
+g2                                           0
+g3                                           0
+g4                                           0
+in                                           0
+n1                                         1.8
+a                                  3.96434e-08
+b                                   5.4776e-09
+do                                         1.8
+out                                3.23676e-09
+vin#branch                                   0
+vg4#branch                             1.8e-12
+vg3#branch                                   0
+vg2#branch                             5.4e-12
+vg1#branch                                   0
+vdd4#branch                           -1.8e-12
+vdd3#branch                           -1.8e-12
+vdd2#branch                           -5.4e-12
+vdd1#branch                           -1.8e-12
+
+
+No. of Data Rows : 50812
+tplh                =  5.177610e-10 targ=  4.154276e-08 trig=  4.102500e-08
+tphl                =  6.752722e-10 targ=  5.175027e-08 trig=  5.107500e-08
+qtot                =  2.15873e-13 from=  2.10000e-08 to=  1.01000e-07
+q_st3               =  3.66635e-14 from=  2.10000e-08 to=  1.01000e-07
+vout_max            =  1.807178e+00 at=  7.153128e-08
+vout_min            =  -7.679629e-03 at=  6.144534e-08
+ipk3                =  3.486727e-05 at=  9.172467e-08
+a_max               =  2.035937e+00 at=  5.110565e-08
+a_min               =  -3.654965e-02 at=  2.105353e-08
+b_max               =  1.843266e+00 at=  7.109504e-08
+b_min               =  -1.035055e-01 at=  2.105999e-08
+t_iso_fall_b_to_a   =  2.584958e-10 targ=  5.136763e-08 trig=  5.110913e-08
+t_iso_rise_a_to_b   =  1.549147e-10 targ=  4.143556e-08 trig=  4.128064e-08
+Note: Simulation executed from .control section 
