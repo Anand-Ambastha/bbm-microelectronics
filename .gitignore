@@ -25,3 +25,8 @@ latex/*.lot
 *.pptx
 
 docs_src/
+latex/*.tex
+latex/*.sty
+latex/*.cls
+latex/*.bib
+latex/Makefile
