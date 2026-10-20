@@ -29,10 +29,6 @@ This repository holds my work for three Microelectronics assignments at Bharati 
 
 ```text
 .
-├── PBL_Review.docx                 ECC-305 PBL review (college template)
-├── CBS_Experiment.docx             ECC-353 CBS experiment report (college template)
-├── Case_Study.docx                 SN74AUP1G04 case study
-├── Case_Study_Presentation.pptx    5-minute talk with speaker notes
 ├── latex/                          LaTeX versions of the three documents
 │   ├── PBL_Review.tex / .pdf
 │   ├── CBS_Experiment.tex / .pdf
@@ -121,7 +117,6 @@ The case study covers the TI **SN74AUP1G04**, a single inverter gate from the Ad
 - a worked dynamic-versus-static power calculation: P<sub>dyn</sub> = (C<sub>pd</sub> + C<sub>L</sub>) V<sub>CC</sub><sup>2</sup> f is about 288 uW at 1.8 V, 10 MHz and 5 pF, against at most 1.6 uW static;
 - applications, trade-offs against the SN74LVC1G04, and ten prepared audience questions and answers, including how the device relates to break-before-make.
 
-`Case_Study_Presentation.pptx` is the 6-slide, 5-minute talk for it, with speaker notes and timings.
 
 ## Reproducing everything
 
